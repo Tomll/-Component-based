@@ -1,0 +1,53 @@
+if (isDebug.toBoolean()){
+    apply plugin: 'com.android.application'  //开发的时候，作为应用开发
+}else {
+    apply plugin: 'com.android.library' //正式发布的时候作为lib依赖
+}
+
+android {
+    compileSdkVersion 26
+
+    defaultConfig {
+        minSdkVersion 21
+        targetSdkVersion 26
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        //ARouter注解 必须要添加此配置项
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = [ moduleName : project.getName() ]
+            }
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    //指定moudle_b在不同开发模式下的的表单文件的路径
+    sourceSets {
+        main {
+            if (isDebug.toBoolean()) {
+                manifest.srcFile 'src/main/debug/AndroidManifest.xml' //组件开发模式下的路径
+            } else {
+                manifest.srcFile 'src/main/AndroidManifest.xml' //集成开发模式下的路径
+            }
+        }
+    }
+
+} //end android
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation 'com.android.support:appcompat-v7:26.0.0-beta1'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.android.support.test:runner:0.5'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:2.2.2'
+    //每个moudle都要依赖基础组件common
+    implementation project(':common')
+}

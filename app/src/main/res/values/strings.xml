@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">Modularization App</string>
+    <string name="app_body">App 壳工程</string>
+    <string name="go_book">去B模块</string>
+    <string name="go_common">去Common模块</string>
+</resources>

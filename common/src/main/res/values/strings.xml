@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Common Moudle</string>
+    <string name="base_moudel">This is Common Module,whitch is the base moudle of the application!</string>
+</resources>

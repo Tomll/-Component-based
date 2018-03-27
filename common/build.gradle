@@ -1,0 +1,74 @@
+//if(isDebug.toBoolean()){
+//    apply plugin: 'com.android.application'  //开发的时候，作为应用开发
+//}else {
+    apply plugin: 'com.android.library' //正式发布的时候作为lib依赖
+//}
+
+android {
+    compileSdkVersion 26
+
+    defaultConfig {
+        minSdkVersion 21
+        targetSdkVersion 26
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        //ARouter注解 必须要添加此配置项
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = [ moduleName : project.getName() ]
+            }
+        }
+
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    //指定moudle_b在不同开发模式下的的表单文件的路径
+    sourceSets {
+        main {
+            if (isDebug.toBoolean()) {
+                manifest.srcFile 'src/main/debug/AndroidManifest.xml' //组件开发模式下的路径
+            } else {
+                manifest.srcFile 'src/main/AndroidManifest.xml' //集成开发模式下的路径
+            }
+        }
+    }
+
+
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation 'com.android.support:appcompat-v7:26.0.0-beta1'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.android.support.test:runner:0.5'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:2.2.2'
+    /*为了方便我们统一管理第三方库，我们将给整个工程提供统一的第三方库的管理入口，
+                  Common库的作用之一就是统一管理依赖开源库，因为其他业务组件都依赖了Common库，
+                  所以这些业务组件也就间接依赖了Common所依赖的开源库。 */
+    //以下为Common组件统一管理的三方库
+    //ARouter 注解处理器（开源路由方案）
+    annotationProcessor 'com.alibaba:arouter-compiler:1.0.3'
+    //ARouter Jar包 （开源路由方案）
+    compile 'com.alibaba:arouter-api:1.2.1.1'
+    //Gson
+    compile 'com.google.code.gson:gson:2.6.2'
+    //Glide
+    compile 'com.github.bumptech.glide:glide:3.7.0'
+    //recyclerview
+    compile 'com.android.support:recyclerview-v7:26.0.0-beta1'
+    //design
+    compile 'com.android.support:design:26.0.0-beta1'
+    //cardview
+    compile 'com.android.support:cardview-v7:26.0.0-beta1'
+    //动态权限框架
+    compile 'pub.devrel:easypermissions:0.1.9'
+}
